@@ -78,7 +78,7 @@ public class Arithmetic {
                 stack.pop();
                 return;
             }
-           
+
             visit[startY][startX] = true; // 标记起点已经访问过
 
             // 分别向四个方向递归
