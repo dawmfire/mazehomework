@@ -27,7 +27,7 @@ public class LinkedStack<T>{
     public String toString() {
         return  this.list.toString();
     }
-
+//进行深度拷贝
     public LinkedStack(LinkedStack<T> stack) {
         this.list = new SinglyList(stack.list);
     }

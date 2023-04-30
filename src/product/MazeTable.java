@@ -105,10 +105,13 @@ public class MazeTable extends JFrame {
         getContentPane().add(scrollPane,BorderLayout.NORTH);
 
 
-        //将多行文件框放入中央
+        //多行文本框设置
+        // 将多行文件框放入中央
         text = new  JTextArea(40,40);
+        text.setEditable(false);   // 不可编辑
+        text.setLineWrap(true);         // 换行策略
+        text.setFont(new Font("标楷体", Font.BOLD, 20));  //设置当前字体
         getContentPane().add(text, BorderLayout.CENTER);
-        //showCoordinatePanel(maze);
 
         //探索道路
         JButton jb = new JButton("找出一条道路");
@@ -135,7 +138,7 @@ public class MazeTable extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Arithmetic arithmetic = new Arithmetic(maze);
-
+                showAllPaths(arithmetic.getQueue());
             }
         });
 
@@ -158,9 +161,7 @@ public class MazeTable extends JFrame {
         //输出道路
         boolean ad =true;
         private void showCoordinatePanel(LinkedStack<position> stack) {
-        text.setEditable(false);   // 不可编辑
-        text.setLineWrap(true);         // 换行策略
-        text.setFont(new Font("标楷体", Font.BOLD, 20));  //设置当前字体
+
         text.setText("(数字1表示下，数字2表示右，数字3表示上，数字4表示左)");
         text.append("道路:");
 
@@ -174,7 +175,7 @@ public class MazeTable extends JFrame {
             List<String> path = new LinkedList <>();
             while (!stack.isEmpty()) {
                 position poss = stack.pop();
-                maze[poss.getY()][poss.getX()]=2;
+              //  maze[poss.getY()][poss.getX()]=2;
                 table.setValueAt("2",poss.getY(),poss.getX());//修改第3行，第4列为666
                 table.repaint();
                 path.add("(" + (poss.getX() + 1) + "," + (poss.getY() + 1) + "," + (poss.getD() + 1) + ")");
@@ -191,5 +192,33 @@ public class MazeTable extends JFrame {
         }
 
     }
+    public void showAllPaths( LinkedQueue<LinkedStack> queue) {
+        text.setText("(数字1表示下，数字2表示右，数字3表示上，数字4表示左)");
+        text.append("所有道路:");
+        int x =0 ;
+        boolean nony = true;
+        while (!queue.isEmpty()) {
+            nony = false;
+            x++;
+            LinkedStack<position> stack1 = queue.poll();
+            List<String> path = new LinkedList<>();
+            text.append("\n第"+x+"条道路：");
+            while (!stack1.isEmpty()) {
+                position pas = stack1.pop();
+                path.add("(" + (pas.getX() + 1) + "," + (pas.getY() + 1) + "," + (pas.getD()) + ")");
+            }
+            Collections.reverse(path);
+            //进行遍历
+            Iterator<String> iterator = path.iterator();
+            while (iterator.hasNext()) {
+                text.append(iterator.next());
+               // System.out.print(iterator.next());   --测试
+            }
+            text.append("\n");
+        }
+        if(nony){
+            text.setText("没有道路");
+        }
 
+    }
 }

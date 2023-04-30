@@ -9,7 +9,6 @@ public class Arithmetic {
 
     int[][] maze;   //迷宫数据
     boolean[][] visit; // 标记是否访问过
-    position pass;  // 储存坐标
     LinkedQueue<LinkedStack>queue;
     LinkedStack<position> stack = new LinkedStack<>();//储存pass的结点
 
@@ -17,7 +16,7 @@ public class Arithmetic {
         this.maze = maze;
         int m = maze.length;   //y 行数
         int n = maze[0].length;     //x 列数
-        visit = new boolean[m][n];
+        visit = new boolean[m][n];   // 储存访问标记
         queue = new LinkedQueue<>();
         init();
     }
@@ -28,8 +27,6 @@ public class Arithmetic {
      * 先向下出发
      */
     void init() {
-       // position pos = new position(0,0,1);
-       // stack.push(pos);
         findAllPaths(maze, visit, 0, 0, maze[0].length, maze.length);
     }
 
@@ -41,9 +38,20 @@ public class Arithmetic {
 
                 return;
             }
+            //设置坐标方向
             if(visit[startY][startX]==false&&(!(startX==0&&startY==0)) ){
                 position pas=stack.peek();
                 int direction=0;
+                /**
+                 * 当前结点的坐标与上一个结点的坐标进行对比，进而进行方向设置
+                 * 当x相同，比较y，判断上下方向
+                 * 当y相同，比较x，判断左右方向
+                 * 1 表示 向下
+                 * 2 表示 向右
+                 * 3 表示 向上
+                 * 4 表示 向左
+                 */
+                //当x相同的情况
                 if(pas.getX()-startX==0) {
                     int dre = pas.getY() - startY;
                     switch (dre) {
@@ -57,6 +65,7 @@ public class Arithmetic {
                             break;
                     }
                 }else {
+                    //当y相同的情况下
                     int dre = pas.getX() - startX;
                     switch (dre) {
                         case -1:
@@ -68,14 +77,19 @@ public class Arithmetic {
                     }
 
                 }
+                //将方向放入上个结点中
                 pas.setD(direction);
-                // 载入数据
-            }stack.push(new position(startX, startY, 0));
+
+            }stack.push(new position(startX, startY, 0));// 载入数据
 
         if (startX == endX - 1 && startY == endY - 1) {
                 // 如果到达终点，则遍历输出当前路径
                 printPath();
-                stack.pop();
+            /**
+             * 注意当验证到坐标为终点的时候，再调用完之后要用pop方法
+             * 否则后续递归的时候会进行错位，出栈错结点
+             */
+            stack.pop();
                 return;
             }
 
@@ -93,33 +107,15 @@ public class Arithmetic {
 
 
     }
-
+    // 将每条路储存起来
     void printPath() {
-        /*
-    // 打印当前路径
-    for (int i = 0; i < visit.length; i++) {
-        for (int j = 0; j < visit[0].length; j++) {
-            if (visit[i][j]) {
-                System.out.print("O "); // O 表示通路
-            } else {
-                System.out.print("# "); // # 表示障碍或未访问过的通路
-            }
-        }
-        System.out.println();
-    }
-    System.out.println();
-}
-
-         */
         position pas;
-        LinkedStack<position> stack2=new LinkedStack<>();
-        queue.add(stack);
- //       System.out.println(queue.toString());
+        LinkedStack<position> stack1=new LinkedStack<>(stack); // 将stack内容全部复制下来
+        queue.add(stack1);
+  /*      LinkedStack<position> stack2=new LinkedStack<>();
+
         List<String> path = new LinkedList<>();
-        LinkedStack<position> stack1 = new LinkedStack<>(stack);
 
-
-            stack1=new LinkedStack<>(queue.peek());
 
             while (!stack1.isEmpty()) {
                 pas=stack1.pop();
@@ -135,5 +131,12 @@ public class Arithmetic {
             }
             System.out.println("");
 
+
+   */
     }
+
+    LinkedQueue<LinkedStack> getQueue(){
+        return  queue;
+    }
+
 }
