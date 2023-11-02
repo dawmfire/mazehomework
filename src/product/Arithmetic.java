@@ -4,27 +4,27 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
+//é€’å½’ç®—æ³•ç±»
 public class Arithmetic {
 
-    int[][] maze;   //ÃÔ¹¬Êı¾İ
-    boolean[][] visit; // ±ê¼ÇÊÇ·ñ·ÃÎÊ¹ı
-    LinkedQueue<LinkedStack>queue;
-    LinkedStack<position> stack = new LinkedStack<>();//´¢´æpassµÄ½áµã
+    int[][] maze;   //è¿·å®«æ•°æ®
+    boolean[][] visit; // æ ‡è®°æ˜¯å¦è®¿é—®è¿‡
+    LinkedQueue<LinkedList> queue;
+    LinkedStack<position> stack = new LinkedStack<>();//å‚¨å­˜passçš„ç»“ç‚¹
 
     Arithmetic(int[][] maze) {
         this.maze = maze;
-        int m = maze.length;   //y ĞĞÊı
-        int n = maze[0].length;     //x ÁĞÊı
-        visit = new boolean[m][n];   // ´¢´æ·ÃÎÊ±ê¼Ç
-        queue = new LinkedQueue<>();
+        int m = maze.length;   //y è¡Œæ•°
+        int n = maze[0].length;     //x åˆ—æ•°
+        visit = new boolean[m][n];   // å‚¨å­˜è®¿é—®æ ‡è®°
+        queue = new LinkedQueue<LinkedList>();
         init();
     }
 
     /**
-     * µİ¹é±éÀú£¬ËÑË÷ËùÓĞ¿ÉÄÜµÄµÀÂ·
-     * Í³Ò»ÉèÖÃ³ö·¢µã¾ùÎª£¨0,0£©£¬³ö¿ÚÎªÓÒÏÂ½Ç
-     * ÏÈÏòÏÂ³ö·¢
+     * é€’å½’éå†ï¼Œæœç´¢æ‰€æœ‰å¯èƒ½çš„é“è·¯
+     * ç»Ÿä¸€è®¾ç½®å‡ºå‘ç‚¹å‡ä¸ºï¼ˆ0,0ï¼‰ï¼Œå‡ºå£ä¸ºå³ä¸‹è§’
+     * å…ˆå‘ä¸‹å‡ºå‘
      */
     void init() {
         findAllPaths(maze, visit, 0, 0, maze[0].length, maze.length);
@@ -32,111 +32,98 @@ public class Arithmetic {
 
     public void findAllPaths(int[][] maze, boolean[][] visit, int startX, int startY, int endX, int endY) {
 
-            // Èç¹ûÆğµãÔ½½ç¡¢ÒÑ¾­·ÃÎÊ¹ı¡¢»òÕß²»ÊÇÍ¨Â·£¬Ôò·µ»Ø
-            if (startX < 0 || startX >= maze[0].length || startY < 0 || startY >= maze.length
-                    || visit[startY][startX] || maze[startY][startX] != 0) {
-
-                return;
-            }
-            //ÉèÖÃ×ø±ê·½Ïò
-            if(visit[startY][startX]==false&&(!(startX==0&&startY==0)) ){
-                position pas=stack.peek();
-                int direction=0;
-                /**
-                 * µ±Ç°½áµãµÄ×ø±êÓëÉÏÒ»¸ö½áµãµÄ×ø±ê½øĞĞ¶Ô±È£¬½ø¶ø½øĞĞ·½ÏòÉèÖÃ
-                 * µ±xÏàÍ¬£¬±È½Ïy£¬ÅĞ¶ÏÉÏÏÂ·½Ïò
-                 * µ±yÏàÍ¬£¬±È½Ïx£¬ÅĞ¶Ï×óÓÒ·½Ïò
-                 * 1 ±íÊ¾ ÏòÏÂ
-                 * 2 ±íÊ¾ ÏòÓÒ
-                 * 3 ±íÊ¾ ÏòÉÏ
-                 * 4 ±íÊ¾ Ïò×ó
-                 */
-                //µ±xÏàÍ¬µÄÇé¿ö
-                if(pas.getX()-startX==0) {
-                    int dre = pas.getY() - startY;
-                    switch (dre) {
-                        case -1:
-                            direction = 1;
-                            break;
-                        case 1:
-                            direction = 3;
-                            break;
-                        case 0:
-                            break;
-                    }
-                }else {
-                    //µ±yÏàÍ¬µÄÇé¿öÏÂ
-                    int dre = pas.getX() - startX;
-                    switch (dre) {
-                        case -1:
-                            direction = 2;
-                            break;
-                        case 1:
-                            direction = 4;
-                            break;
-                    }
-
+        // å¦‚æœèµ·ç‚¹è¶Šç•Œã€å·²ç»è®¿é—®è¿‡ã€æˆ–è€…ä¸æ˜¯é€šè·¯ï¼Œåˆ™è¿”å›
+        if (startX < 0 || startX >= maze[0].length || startY < 0 || startY >= maze.length
+                || visit[startY][startX] || maze[startY][startX] != 0) {
+            return;
+        }
+        //è®¾ç½®åæ ‡æ–¹å‘
+        if(visit[startY][startX]==false&&(!(startX==0&&startY==0)) ){
+            position pas=stack.peek();
+            int direction=0;
+            /**
+             * å½“å‰ç»“ç‚¹çš„åæ ‡ä¸ä¸Šä¸€ä¸ªç»“ç‚¹çš„åæ ‡è¿›è¡Œå¯¹æ¯”ï¼Œè¿›è€Œè¿›è¡Œæ–¹å‘è®¾ç½®
+             * å½“xç›¸åŒï¼Œæ¯”è¾ƒyï¼Œåˆ¤æ–­ä¸Šä¸‹æ–¹å‘
+             * å½“yç›¸åŒï¼Œæ¯”è¾ƒxï¼Œåˆ¤æ–­å·¦å³æ–¹å‘
+             * 1 è¡¨ç¤º å‘ä¸‹
+             * 2 è¡¨ç¤º å‘å³
+             * 3 è¡¨ç¤º å‘ä¸Š
+             * 4 è¡¨ç¤º å‘å·¦
+             */
+            //å½“xç›¸åŒçš„æƒ…å†µ
+            if(pas.getX()-startX==0) {
+                int dre = pas.getY() - startY;
+                switch (dre) {
+                    case -1:
+                        direction = 1;
+                        break;
+                    case 1:
+                        direction = 3;
+                        break;
+                    case 0:
+                        break;
                 }
-                //½«·½Ïò·ÅÈëÉÏ¸ö½áµãÖĞ
-                pas.setD(direction);
+            }else {
+                //å½“yç›¸åŒçš„æƒ…å†µä¸‹
+                int dre = pas.getX() - startX;
+                switch (dre) {
+                    case -1:
+                        direction = 2;
+                        break;
+                    case 1:
+                        direction = 4;
+                        break;
+                }
 
-            }stack.push(new position(startX, startY, 0));// ÔØÈëÊı¾İ
+            }
+            //å°†æ–¹å‘æ”¾å…¥ä¸Šä¸ªç»“ç‚¹ä¸­
+            pas.setD(direction);
+
+        }
+        stack.push(new position(startX, startY, 0));// è½½å…¥æ•°æ®
 
         if (startX == endX - 1 && startY == endY - 1) {
-                // Èç¹ûµ½´ïÖÕµã£¬Ôò±éÀúÊä³öµ±Ç°Â·¾¶
-                printPath();
+            // å¦‚æœåˆ°è¾¾ç»ˆç‚¹ï¼Œåˆ™éå†è¾“å‡ºå½“å‰è·¯å¾„
+            printPath();
             /**
-             * ×¢Òâµ±ÑéÖ¤µ½×ø±êÎªÖÕµãµÄÊ±ºò£¬ÔÙµ÷ÓÃÍêÖ®ºóÒªÓÃpop·½·¨
-             * ·ñÔòºóĞøµİ¹éµÄÊ±ºò»á½øĞĞ´íÎ»£¬³öÕ»´í½áµã
+             * æ³¨æ„å½“éªŒè¯åˆ°åæ ‡ä¸ºç»ˆç‚¹çš„æ—¶å€™ï¼Œå†è°ƒç”¨å®Œä¹‹åè¦ç”¨popæ–¹æ³•
+             * å¦åˆ™åç»­é€’å½’çš„æ—¶å€™ä¼šè¿›è¡Œé”™ä½ï¼Œå‡ºæ ˆé”™ç»“ç‚¹
              */
             stack.pop();
-                return;
-            }
-
-            visit[startY][startX] = true; // ±ê¼ÇÆğµãÒÑ¾­·ÃÎÊ¹ı
-
-            // ·Ö±ğÏòËÄ¸ö·½Ïòµİ¹é
-            findAllPaths(maze, visit, startX, startY + 1, endX, endY); // ÏòÏÂ
-            findAllPaths(maze, visit, startX + 1, startY, endX, endY ); // ÏòÓÒ
-            findAllPaths(maze, visit, startX, startY - 1, endX, endY); // ÏòÉÏ
-            findAllPaths(maze, visit, startX - 1, startY, endX, endY); // Ïò×ó
-            stack.pop();
-            visit[startY][startX] = false; // »Ö¸´±ê¼Ç£¬ÒÔ±ãÏÂÒ»´Î·ÃÎÊ
-
-
-
-
+            return;
+        }
+        visit[startY][startX] = true; // æ ‡è®°èµ·ç‚¹å·²ç»è®¿é—®è¿‡
+        // åˆ†åˆ«å‘å››ä¸ªæ–¹å‘é€’å½’
+        findAllPaths(maze, visit, startX, startY + 1, endX, endY); // å‘ä¸‹
+        findAllPaths(maze, visit, startX + 1, startY, endX, endY ); // å‘å³
+        findAllPaths(maze, visit, startX, startY - 1, endX, endY); // å‘ä¸Š
+        findAllPaths(maze, visit, startX - 1, startY, endX, endY); // å‘å·¦
+        stack.pop();
+        visit[startY][startX] = false; // æ¢å¤æ ‡è®°ï¼Œä»¥ä¾¿ä¸‹ä¸€æ¬¡è®¿é—®
     }
-    // ½«Ã¿ÌõÂ·´¢´æÆğÀ´
+
+    // å°†æ¯æ¡è·¯å‚¨å­˜èµ·æ¥
     void printPath() {
         position pas;
-        LinkedStack<position> stack1=new LinkedStack<>(stack); // ½«stackÄÚÈİÈ«²¿¸´ÖÆÏÂÀ´
-        queue.add(stack1);
-  /*      LinkedStack<position> stack2=new LinkedStack<>();
-
+        LinkedStack<position> stack2=new LinkedStack<>(stack);
+        LinkedStack<position> stack1=new LinkedStack<>(stack); // å°†stackå†…å®¹å…¨éƒ¨å¤åˆ¶ä¸‹æ¥
         List<String> path = new LinkedList<>();
-
-
             while (!stack1.isEmpty()) {
                 pas=stack1.pop();
-                stack2.push(pas);
+               // stack2.push(pas);
                 path.add("(" + (pas.getX()+1 ) + "," + (pas.getY() +1) + "," + (pas.getD()  ) + ")");
             }
             Collections.reverse(path);
-            //½øĞĞ±éÀú
+            //è¿›è¡Œéå†
+        queue.add((LinkedList) path);
             Iterator<String> iterator = path.iterator();
             while (iterator.hasNext()) {
               //  text.append(iterator.next());
                 System.out.print(iterator.next());
             }
             System.out.println("");
-
-
-   */
     }
-
-    LinkedQueue<LinkedStack> getQueue(){
+    LinkedQueue<LinkedList> getQueue(){
         return  queue;
     }
-
 }

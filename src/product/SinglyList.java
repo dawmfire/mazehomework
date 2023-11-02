@@ -61,28 +61,6 @@ public class SinglyList<T>{
         return (i>=0 && p!=null) ? p.data : null;   //若p指向第i个结点，则返回其元素值
     }
 
-    //设置第i个元素为x，0≤i<单链表长度且x!=null。
-    //若x==null，抛出空对象异常；若i序号越界，抛出序号越界异常。
-    // 没有返回值
-    public void set(int i, T x)
-    {
-        if(x==null) {
-            throw new NullPointerException("x==null");     //抛出空对象异常
-        } else
-        {
-            SinglyListNode<T> p=this.head.next;
-            for(int j=0;  p!=null && j<i;  j++)  //遍历寻找第i个结点（p指向）
-            {
-                p = p.next;
-            }
-            if(i>=0 && p!=null) {
-                p.data = x;                       //p指向第i个结点
-            } else {
-                throw new IndexOutOfBoundsException(i+"");//抛出序号越界异常
-            }
-        }
-    }
-
     public int size()                            //返回单链表长度，O(n)
     {
         int i=0;

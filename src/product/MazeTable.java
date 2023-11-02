@@ -13,40 +13,40 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * MazeTableÀàÊÇÒ»¸ö±í¸ñ¸ñÊ½µÄÃÔ¹¬Í¼ĞÎ±íÊ¾¡£Ëü´´½¨Ò»¸ö¶şÎ¬ÕûÊıÊı×é×÷Îª±í¸ñµÄÊı¾İ£¬
- * ²¢Ê¹ÓÃTableCellRenderer¸øÖµÎª¡°1¡±µÄµ¥Ôª¸ñ×ÅÉ«¡£Ëü»¹È·±£ÁË±í¸ñµ¥Ôª¸ñÊÇ²»¿É±à¼­µÄ£¬
- * ²¢ÇÒ±í¸ñÍ·²»ÄÜ±»µ÷Õû´óĞ¡»òÖØĞÂÅÅĞò¡£
+ * MazeTableç±»æ˜¯ä¸€ä¸ªè¡¨æ ¼æ ¼å¼çš„è¿·å®«å›¾å½¢è¡¨ç¤ºã€‚å®ƒåˆ›å»ºä¸€ä¸ªäºŒç»´æ•´æ•°æ•°ç»„ä½œä¸ºè¡¨æ ¼çš„æ•°æ®ï¼Œ
+ * å¹¶ä½¿ç”¨TableCellRendererç»™å€¼ä¸ºâ€œ1â€çš„å•å…ƒæ ¼ç€è‰²ã€‚å®ƒè¿˜ç¡®ä¿äº†è¡¨æ ¼å•å…ƒæ ¼æ˜¯ä¸å¯ç¼–è¾‘çš„ï¼Œ
+ * å¹¶ä¸”è¡¨æ ¼å¤´ä¸èƒ½è¢«è°ƒæ•´å¤§å°æˆ–é‡æ–°æ’åºã€‚
  */
 public class MazeTable extends JFrame {
-    int[][] maze;    // ÃÔ¹¬´¢´æ
-    JTextArea text;  // Êä³öÃæ°å
+    int[][] maze;    // è¿·å®«å‚¨å­˜
+    JTextArea text;  // è¾“å‡ºé¢æ¿
     JTable table;
-    LinkedStack<position> stack; // ´æ´¢µÀÂ·×ø±ê
+    LinkedStack<position> stack; // å­˜å‚¨é“è·¯åæ ‡
     public MazeTable(int[][] maze) {
-        // ´´½¨±í¸ñÄ£ĞÍ
+        // åˆ›å»ºè¡¨æ ¼æ¨¡å‹
         this.maze = maze;
         String[] columnNames = new String[maze[0].length];
         for (int i = 0; i < columnNames.length; i++) {
             columnNames[i] = "";
         }
         /**
-        *ÓÉÓÚtable×é¼şÖĞµÄJTable£¨Object data[][] , Object colunmName[])ÖĞµÄ²ÎÊıÊÇObjectÀàĞÍ
-        *ËùÒÔÏÈ½«intÀàĞÍ×ª³ÉobjectÀàĞÍ
+        *ç”±äºtableç»„ä»¶ä¸­çš„JTableï¼ˆObject data[][] , Object colunmName[])ä¸­çš„å‚æ•°æ˜¯Objectç±»å‹
+        *æ‰€ä»¥å…ˆå°†intç±»å‹è½¬æˆobjectç±»å‹
          */
-        //Í³Ò»ÉèÖÃ×óÉÏ½ÇÎªÈë¿Ú£¬ÓÒÏÂ½ÇÎª³ö¿Ú¡£
+        //ç»Ÿä¸€è®¾ç½®å·¦ä¸Šè§’ä¸ºå…¥å£ï¼Œå³ä¸‹è§’ä¸ºå‡ºå£ã€‚
         Object[][] data = new Object[maze.length][maze[0].length];
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
                 if (i == 0 && j == 0) {
-                    data[i][j]="0(Èë¿Ú)";
+                    data[i][j]="0(å…¥å£)";
                 } else if (i == maze.length-1 && j==maze[0].length-1) {
-                    data[i][j]="0(³ö¿Ú)";
+                    data[i][j]="0(å‡ºå£)";
                 } else {
                     data[i][j] = maze[i][j] == 1 ? "1" : "0";
                 }
             }
         }
-            //ÉèÖÃµ¥Ôª¸ñ²»¿É±à¼­
+            //è®¾ç½®å•å…ƒæ ¼ä¸å¯ç¼–è¾‘
         DefaultTableModel mode = new DefaultTableModel(data, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -59,19 +59,19 @@ public class MazeTable extends JFrame {
 
 
 
-        // ÉèÖÃµ¥Ôª¸ñäÖÈ¾Æ÷
+        // è®¾ç½®å•å…ƒæ ¼æ¸²æŸ“å™¨
         TableCellRenderer renderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 if (maze[row][column] == 1) {
-                    c.setBackground(Color.GRAY);  // Ç½µÄµ¥Ôª¸ñÓÃ»ÒÉ«±³¾°
+                    c.setBackground(Color.GRAY);  // å¢™çš„å•å…ƒæ ¼ç”¨ç°è‰²èƒŒæ™¯
                 } else {
-                    c.setBackground(Color.WHITE);  // Â·µÄµ¥Ôª¸ñÓÃ°×É«±³¾°
+                    c.setBackground(Color.WHITE);  // è·¯çš„å•å…ƒæ ¼ç”¨ç™½è‰²èƒŒæ™¯
                 }
                 return c;
             }
-            //ÉèÖÃ±íÊı¾İ¾ÓÖĞÏÔÊ¾
+            //è®¾ç½®è¡¨æ•°æ®å±…ä¸­æ˜¾ç¤º
             @Override
             public void setHorizontalAlignment(int alignment) {
                 super.setHorizontalAlignment(SwingConstants.CENTER);
@@ -83,14 +83,14 @@ public class MazeTable extends JFrame {
 
 
         /**
-         * µ±ÓĞ±í¸ñäÖÈ¾Æ÷ÖØĞ´µÄÊ±ºò£¬Ò²Ò»²¢ÖØĞ´setHorizontalAlignment·½·¨£¬
+         * å½“æœ‰è¡¨æ ¼æ¸²æŸ“å™¨é‡å†™çš„æ—¶å€™ï¼Œä¹Ÿä¸€å¹¶é‡å†™setHorizontalAlignmentæ–¹æ³•ï¼Œ
          *  public void setHorizontalAlignment(int alignment) {
          *                 super.setHorizontalAlignment(SwingConstants.CENTER);
          *             }
-         *  ÄÜ¹»Ê¹Êı¾İ¾ÓÖĞ¡£
-         *  µ±Ã»ÓĞ±í¸ñäÖÈ¾Æ÷ÖØĞ´µÄÊ±ºò£¬¿ÉÒÔÖ±½ÓÓÃ£º
-         *1,DefaultTableCellRenderer dc=new DefaultTableCellRenderer();//´´½¨Ò»¸öÄ¬ÈÏµÄ±íµ¥Ôª¸ñäÖÈ¾Æ÷
-         *2.dc.setHorizontalAlignment(SwingConstants.CENTER);//setHorizontalAlignmentÉèÖÃ±êÇ©ÄÚÈİÑØ×ÅXÖáµÄ¶ÔÆë·½Ê½,ÓĞÒÔÏÂ³£Á¿LEFT,CENTER(½öÓÃÓÚÍ¼ÏñµÄ±êÇ©µÄÄ¬ÈÏÖµ)RAGHT,LEADING(Ä¬ÈÏÎª´¿ÎÄ±¾µÄ±ê¼Ç),»òTRAILING
+         *  èƒ½å¤Ÿä½¿æ•°æ®å±…ä¸­ã€‚
+         *  å½“æ²¡æœ‰è¡¨æ ¼æ¸²æŸ“å™¨é‡å†™çš„æ—¶å€™ï¼Œå¯ä»¥ç›´æ¥ç”¨ï¼š
+         *1,DefaultTableCellRenderer dc=new DefaultTableCellRenderer();//åˆ›å»ºä¸€ä¸ªé»˜è®¤çš„è¡¨å•å…ƒæ ¼æ¸²æŸ“å™¨
+         *2.dc.setHorizontalAlignment(SwingConstants.CENTER);//setHorizontalAlignmentè®¾ç½®æ ‡ç­¾å†…å®¹æ²¿ç€Xè½´çš„å¯¹é½æ–¹å¼,æœ‰ä»¥ä¸‹å¸¸é‡LEFT,CENTER(ä»…ç”¨äºå›¾åƒçš„æ ‡ç­¾çš„é»˜è®¤å€¼)RAGHT,LEADING(é»˜è®¤ä¸ºçº¯æ–‡æœ¬çš„æ ‡è®°),æˆ–TRAILING
          *3.table.setDefaultRenderer(Object.class, dc);
          * --------OR-----------
          * DefaultTableCellRenderer cr = new DefaultTableCellRenderer ();
@@ -98,30 +98,30 @@ public class MazeTable extends JFrame {
          * table.setDefaultRenderer (Object.class, cr);
          */
 
-        // ½«±í¸ñÌí¼Óµ½¹ö¶¯Ãæ°åÖĞ
+        // å°†è¡¨æ ¼æ·»åŠ åˆ°æ»šåŠ¨é¢æ¿ä¸­
         JScrollPane scrollPane = new JScrollPane(table);
 
-        // Ìí¼Ó¹ö¶¯Ãæ°åµ½´°¿ÚÖĞ
+        // æ·»åŠ æ»šåŠ¨é¢æ¿åˆ°çª—å£ä¸­
         getContentPane().add(scrollPane,BorderLayout.NORTH);
 
 
-        //¶àĞĞÎÄ±¾¿òÉèÖÃ
-        // ½«¶àĞĞÎÄ¼ş¿ò·ÅÈëÖĞÑë
+        //å¤šè¡Œæ–‡æœ¬æ¡†è®¾ç½®
+        // å°†å¤šè¡Œæ–‡ä»¶æ¡†æ”¾å…¥ä¸­å¤®
         text = new  JTextArea(40,40);
-        text.setEditable(false);   // ²»¿É±à¼­
-        text.setLineWrap(true);         // »»ĞĞ²ßÂÔ
-        text.setFont(new Font("±ê¿¬Ìå", Font.BOLD, 20));  //ÉèÖÃµ±Ç°×ÖÌå
+        text.setEditable(false);   // ä¸å¯ç¼–è¾‘
+        text.setLineWrap(true);         // æ¢è¡Œç­–ç•¥
+        text.setFont(new Font("æ ‡æ¥·ä½“", Font.BOLD, 20));  //è®¾ç½®å½“å‰å­—ä½“
         getContentPane().add(text, BorderLayout.CENTER);
 
-        //Ì½Ë÷µÀÂ·
-        JButton jb = new JButton("ÕÒ³öÒ»ÌõµÀÂ·");
+        //æ¢ç´¢é“è·¯
+        JButton jb = new JButton("æ‰¾å‡ºä¸€æ¡é“è·¯");
         JPanel jp = new JPanel();
         jp.add(jb,BorderLayout.SOUTH);
         getContentPane().add(jp, BorderLayout.SOUTH);
         jb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // ÏÔÊ¾ÕıÈ·µÄµÀÂ·
+                // æ˜¾ç¤ºæ­£ç¡®çš„é“è·¯
             Figure figure = new Figure();
             figure.solve(maze);
             stack=figure.printPath();
@@ -130,8 +130,8 @@ public class MazeTable extends JFrame {
             }
         });
 
-        //Ì½Ë÷¶àÌõ¿ÉÄÜµÀÂ·
-        JButton jb1 =new JButton("ËùÓĞ¿ÉÄÜµÄµÀÂ·");
+        //æ¢ç´¢å¤šæ¡å¯èƒ½é“è·¯
+        JButton jb1 =new JButton("æ‰€æœ‰å¯èƒ½çš„é“è·¯");
         jp.add(jb1,BorderLayout.CENTER);
         jb1.addActionListener(new ActionListener() {
 
@@ -143,31 +143,31 @@ public class MazeTable extends JFrame {
         });
 
 
-        // ÉèÖÃ´°¿ÚÊôĞÔ
-        setTitle("ÃÔ¹¬±í¸ñ");
+        // è®¾ç½®çª—å£å±æ€§
+        setTitle("è¿·å®«è¡¨æ ¼");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 1000);
         setLocationRelativeTo(null);
         setVisible(true);
-        //²»¿ÉÕûÁĞÒÆ¶¯£¬true±íÊ¾¿ÉÒÆ¶¯£¬false±íÊ¾²»¿ÉÒÆ¶¯
+        //ä¸å¯æ•´åˆ—ç§»åŠ¨ï¼Œtrueè¡¨ç¤ºå¯ç§»åŠ¨ï¼Œfalseè¡¨ç¤ºä¸å¯ç§»åŠ¨
         table.getTableHeader().setReorderingAllowed(false);
-        //²»¿ÉÀ­¶¯±í¸ñ£¬true±íÊ¾¿ÉÒÆ¶¯£¬false±íÊ¾²»¿ÉÒÆ¶¯
+        //ä¸å¯æ‹‰åŠ¨è¡¨æ ¼ï¼Œtrueè¡¨ç¤ºå¯ç§»åŠ¨ï¼Œfalseè¡¨ç¤ºä¸å¯ç§»åŠ¨
         table.getTableHeader().setResizingAllowed(false);
 
 
 
 
     }
-        //Êä³öµÀÂ·
+        //è¾“å‡ºé“è·¯
         boolean ad =true;
         private void showCoordinatePanel(LinkedStack<position> stack) {
 
-        text.setText("(Êı×Ö1±íÊ¾ÏÂ£¬Êı×Ö2±íÊ¾ÓÒ£¬Êı×Ö3±íÊ¾ÉÏ£¬Êı×Ö4±íÊ¾×ó)");
-        text.append("µÀÂ·:");
+        text.setText("(æ•°å­—1è¡¨ç¤ºä¸‹ï¼Œæ•°å­—2è¡¨ç¤ºå³ï¼Œæ•°å­—3è¡¨ç¤ºä¸Šï¼Œæ•°å­—4è¡¨ç¤ºå·¦)");
+        text.append("é“è·¯:");
 
         /**
-         * table.setValueAt("2",poss.getY(),poss.getX());//ĞŞ¸ÄµÚposs.getY(ĞĞ£¬µÚposs.getX()ÁĞÎª2,ĞŞ¸Äµ¥Ôª¸ñÊı¾İ
-         * table.repaint();ÔÙÖØ»æ
+         * table.setValueAt("2",poss.getY(),poss.getX());//ä¿®æ”¹ç¬¬poss.getY(è¡Œï¼Œç¬¬poss.getX()åˆ—ä¸º2,ä¿®æ”¹å•å…ƒæ ¼æ•°æ®
+         * table.repaint();å†é‡ç»˜
          */
 
         if(stack!=null) {
@@ -175,50 +175,42 @@ public class MazeTable extends JFrame {
             List<String> path = new LinkedList <>();
             while (!stack.isEmpty()) {
                 position poss = stack.pop();
-              //  maze[poss.getY()][poss.getX()]=2;
-                table.setValueAt("2",poss.getY(),poss.getX());//ĞŞ¸ÄµÚ3ĞĞ£¬µÚ4ÁĞÎª666
+                table.setValueAt("2",poss.getY(),poss.getX());//ä¿®æ”¹ç¬¬3è¡Œï¼Œç¬¬4åˆ—ä¸º666
                 table.repaint();
                 path.add("(" + (poss.getX() + 1) + "," + (poss.getY() + 1) + "," + (poss.getD() + 1) + ")");
-                //System.out.print("(" + (poss.getX() + 1) + "," + (poss.getY() + 1) + "," + (poss.getD() + 1) + ")" );
-
-            }Collections.reverse(path);
-            //½øĞĞ±éÀú
+            }Collections.reverse(path);//è¿›è¡Œæ’åºé¢ å€’
+            //è¿›è¡Œéå†
             Iterator<String> iterator = path.iterator();
             while (iterator.hasNext()) {
                 text.append(iterator.next());
             }
         }if(ad) {
-            text.setText("Ã»ÓĞµÀÂ·");
+            text.setText("æ²¡æœ‰é“è·¯");
         }
 
     }
-    public void showAllPaths( LinkedQueue<LinkedStack> queue) {
-        text.setText("(Êı×Ö1±íÊ¾ÏÂ£¬Êı×Ö2±íÊ¾ÓÒ£¬Êı×Ö3±íÊ¾ÉÏ£¬Êı×Ö4±íÊ¾×ó)");
-        text.append("ËùÓĞµÀÂ·:");
+    //è¾“å‡ºæ‰€æœ‰é“è·¯
+    public void showAllPaths( LinkedQueue<LinkedList> queue) {
+        text.setText("(æ•°å­—1è¡¨ç¤ºä¸‹ï¼Œæ•°å­—2è¡¨ç¤ºå³ï¼Œæ•°å­—3è¡¨ç¤ºä¸Šï¼Œæ•°å­—4è¡¨ç¤ºå·¦)");
+        text.append("æ‰€æœ‰é“è·¯:");
         int x =0 ;
         boolean nony = true;
         while (!queue.isEmpty()) {
             nony = false;
             x++;
-            LinkedStack<position> stack1 = queue.poll();
-            List<String> path = new LinkedList<>();
-            text.append("\nµÚ"+x+"ÌõµÀÂ·£º");
-            while (!stack1.isEmpty()) {
-                position pas = stack1.pop();
-                path.add("(" + (pas.getX() + 1) + "," + (pas.getY() + 1) + "," + (pas.getD()) + ")");
-            }
-            Collections.reverse(path);
-            //½øĞĞ±éÀú
+            List<String> path ;
+            path = queue.poll();
+            text.append("\nç¬¬"+x+"æ¡é“è·¯ï¼š");
             Iterator<String> iterator = path.iterator();
-            while (iterator.hasNext()) {
+            while (iterator.hasNext()) { // éå†è¾“å‡º
                 text.append(iterator.next());
-               // System.out.print(iterator.next());   --²âÊÔ
+                // System.out.print(iterator.next());   --æµ‹è¯•
             }
             text.append("\n");
         }
         if(nony){
-            text.setText("Ã»ÓĞµÀÂ·");
-        }
+            text.setText("æ²¡æœ‰é“è·¯");
 
     }
-}
+    }
+    }

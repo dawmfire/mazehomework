@@ -2,64 +2,52 @@ package product;
 /**
  * @author Dawn
  */
+// éé€’å½’ç®—æ³•
 public class Figure {
-    private   int[][] directions = {{0, 1}, {1, 0},{0, -1},{-1, 0} }; // ÏÂ ÓÒ ÉÏ ×ó ËÄ¸ö·½Ïò
+    private   int[][] directions = {{0, 1}, {1, 0},{0, -1},{-1, 0} }; // ä¸‹ å³ ä¸Š å·¦ å››ä¸ªæ–¹å‘
     LinkedStack<position> stack;
     public  void solve(int[][] maze) {
-        int m = maze.length;   //y ĞĞÊı
-        int n = maze[0].length;     //x ÁĞÊı
+        int m = maze.length;   //y è¡Œæ•°
+        int n = maze[0].length;     //x åˆ—æ•°
         /**
-         * Êı×Ö1±íÊ¾ÏÂ£¬Êı×Ö2±íÊ¾ÓÒ£¬Êı×Ö3±íÊ¾ÉÏ£¬Êı×Ö4±íÊ¾×ó
-         * ÉèÖÃ³õÊ¼µã£¨0,0£©ÏÈ×ßÏÂ
+         * æ•°å­—1è¡¨ç¤ºä¸‹ï¼Œæ•°å­—2è¡¨ç¤ºå³ï¼Œæ•°å­—3è¡¨ç¤ºä¸Šï¼Œæ•°å­—4è¡¨ç¤ºå·¦
+         * è®¾ç½®åˆå§‹ç‚¹ï¼ˆ0,0ï¼‰å…ˆèµ°ä¸‹
          */
         position pos = new position(0,0);
-        boolean[][] visited = new boolean[m][n];   // ±ê¼ÇÊÇ·ñ·ÃÎÊ¹ı
-      //  System.out.println(m);
-      //  System.out.println(n);
-        stack = new LinkedStack<>(); // ´æ´¢Â·¾¶µÄÕ»
-        stack.push(pos); // ÆğµãÈëÕ»
+        boolean[][] visited = new boolean[m][n];   // æ ‡è®°æ˜¯å¦è®¿é—®è¿‡
+        stack = new LinkedStack<>(); // å­˜å‚¨è·¯å¾„çš„æ ˆ
+        stack.push(pos); // èµ·ç‚¹å…¥æ ˆ
         visited[0][0] = true;
-
         while (!stack.isEmpty()) {
-            position poss = stack.peek(); // µ±Ç°Î»ÖÃ³öÕ»
-            int i = poss.getX(), j = poss.getY(), d = poss.getD(); // µ±Ç°Î»ÖÃºÍ·½Ïò
-            visited[j][i] = true;   // ×ß¹ıµÄµã¼ÇÎªtrue
-            if (i == n-1 && j == m-1 ) { // µ½´ïÖÕµã
-
+            position poss = stack.peek(); // å½“å‰ä½ç½®æå–æ ˆé¡¶
+            int i = poss.getX(), j = poss.getY(), d = poss.getD(); // å½“å‰ä½ç½®å’Œæ–¹å‘
+            visited[j][i] = true;   // èµ°è¿‡çš„ç‚¹è®°ä¸ºtrue
+            if (i == n-1 && j == m-1 ) { // åˆ°è¾¾ç»ˆç‚¹
+                poss.setD(-1);
                 return;
             }
              boolean found = false;
-            for (int k = 0; k < directions.length; k++) { // ³¢ÊÔËÄ¸ö·½Ïò
+            for (int k = 0; k < directions.length; k++) { // å°è¯•å››ä¸ªæ–¹å‘
 
                 int nowX = i + directions[k][0], nowY = j + directions[k][1];
                 /**
-                 * ÅĞ¶ÏË³Ê±ÕëµÄ·½ÏòµÄµãÊÇ·ñ·ûºÏ±ê×¼£¬¸ÕºÃÔÚÂ·ÉÏ£¬ÅĞ¶Ï¸ÃµãÊÇ·ñÒÑ¾­×ß¹ı
+                 * åˆ¤æ–­é¡ºæ—¶é’ˆçš„æ–¹å‘çš„ç‚¹æ˜¯å¦ç¬¦åˆæ ‡å‡†ï¼Œåˆšå¥½åœ¨è·¯ä¸Šï¼Œåˆ¤æ–­è¯¥ç‚¹æ˜¯å¦å·²ç»èµ°è¿‡
                  */
                 if (nowX >= 0 && nowX < n && nowY >= 0 && nowY < m && maze[nowY][nowX] == 0 && !visited[nowY][nowX]) {
                     poss.setD(k);
-                    stack.push(new position(nowX, nowY)); // ĞÂÎ»ÖÃÈëÕ»
+                    stack.push(new position(nowX, nowY)); // æ–°ä½ç½®å…¥æ ˆ
                     found = true;
                     break;
                 }
             }
                 if (!found) {
-                    stack.pop(); // ËÄ¸ö·½Ïò¶¼²»ÄÜ×ß£¬µ¯³öµ±Ç°Õ»¶¥ÔªËØ
+                    stack.pop(); // å››ä¸ªæ–¹å‘éƒ½ä¸èƒ½èµ°ï¼Œå¼¹å‡ºå½“å‰æ ˆé¡¶å…ƒç´ 
                 }
-
         }
         System.out.println("No path found!");
-        stack=null ;//µ±Ã»ÓĞÖÕµãµÄÊ±ºò
+        stack=null ;//å½“æ²¡æœ‰ç»ˆç‚¹çš„æ—¶å€™
     }
-
      public LinkedStack<position> printPath() {
             return stack;
     }
-
-
-
-
-
-
-
-
 }

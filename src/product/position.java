@@ -5,12 +5,11 @@ public class position {
     position(int x,int y){
         this.x = x;
         this.y = y;
-        this.d = d;
     }
     position(int x,int y,int d){
-        this.x = x;
-        this.y = y;
-        this.d = d;
+        this.x = x;     //x轴
+        this.y = y;     //y轴
+        this.d = d; // 方向
     }
     public void setD(int d) {
         this.d = d;

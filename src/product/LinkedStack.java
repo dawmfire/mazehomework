@@ -32,7 +32,4 @@ public class LinkedStack<T>{
         this.list = new SinglyList(stack.list);
     }
 
-    public void copy(LinkedStack<T> stack) {
-        this.list = new SinglyList(stack.list);
-    }
 }
